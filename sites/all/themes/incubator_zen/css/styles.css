@@ -1,0 +1,235 @@
+/**
+ * @file
+ * Styles are organized using the SMACSS technique. @see http://smacss.com/book/
+ *
+ * When you turn on CSS aggregation at admin/config/development/performance, all
+ * of these @include files will be combined into a single file.
+ */
+
+/* HTML element (SMACSS base) rules */
+@import "normalize.css";
+
+/* Layout rules */
+@import "layouts/responsive.css";
+
+/* Component (SMACSS module) rules */
+@import "components/misc.css";
+/* Optionally, add your own components here. */
+@import "print.css";
+
+/* SMACSS theme rules */
+/* @import "theme-A.css"; */
+/* @import "theme-B.css"; */
+
+
+/* Menu*/
+.tb-megamenu {
+background: #000064;
+}
+
+.tb-megamenu .nav > .active > a, .tb-megamenu .nav > .active > a:hover, .tb-megamenu .nav > .active > a:focus {
+    background-color: #000064;    
+}
+
+
+/*backgroud color*/
+.tb-megamenu .nav > li > a:focus,
+.tb-megamenu .nav > li > a:hover{
+    background-color: #c5c6de;
+    color: #fff;
+    }
+
+
+/* Wrapper for website name and slogan. */
+.header__name-and-slogan {
+    float: right;
+ width:50%; 
+    margin-left:15%; 
+    margin-right:15%;
+}
+
+
+/* The name of the website. */
+.header__site-name {
+  background: #ffffff;
+  color: #0E0742;
+  margin: 0;
+  font-size: 2em;
+  line-height: 1.4em;
+  text-decoration: underline;
+}
+
+
+
+/* Navigation bar */
+
+@media all and (min-width: 480px) {
+
+  #main {
+
+    /* Move all the children of #main down to make room. */
+    
+    padding-top: 1;
+
+    position: relative;
+  }
+
+  
+  #navigation {
+    
+   /* Move the navbar up inside #main's padding. */
+
+    position: absolute;
+
+    top: 0;
+
+    height: 2;
+
+    width: 100%;
+  }
+
+}
+
+/* The link around the name of the website. */
+.header__site-link:link,
+.header__site-link:visited {
+  color: #000;
+  text-decoration: none;
+  background-color: #ffffff;
+}
+
+
+/* Wrapper for Slide show. */
+.header__name-and-slogan {
+    float: right;
+   width:50%; 
+    margin-left:15%; 
+    margin-right:15%;
+}
+
+
+/*slide show  - Block   margin-left:10%; float: right; width:80%;*/
+
+#views_slideshow_cycle_main_test_view-block{
+    float: right;
+    width:80%;    
+}
+
+
+
+
+body{
+	background: #ffffff;
+	color: #0E0742;
+	font-size: 14px;
+	line-height: 1.6;
+	font-family: Arial, Helvetica Neue, Helvetica, sans-serif;	
+	}
+
+
+a:hover {
+text-decoration: underline;
+color: #7C81B8;
+background: #c5c6de;
+}
+
+h1 {
+	line-height: 0.8;
+}
+
+
+h2{
+	line-height: 1em;
+/*margin-bottom: 4px;	*/
+}
+
+
+/* Title of the page like "About US" */
+.page__title {
+	color: #0E0742;
+	font-size: 20px;
+	line-height: 1.4;
+	text-decoration: underline;
+	font-family: Arial, Helvetica Neue, Helvetica, sans-serif;	
+}
+
+
+/*tabs around Title Page   d5d5d5*/
+.tabs-primary{
+border-top: 0px;
+border-bottom: 0px;  
+padding: 0px;
+margin: 0.5em 0;
+  }
+
+
+/* Paragraph blank Lines from #u125*/
+.field-items{
+background: #E3E3E3;
+ 
+}
+
+/* Paragraph color form  #u125*/
+p{
+background-color: #E3E3E3;
+margin-top: 4px;
+margin-bottom: 10px; 
+}
+
+/*WebForm display */
+.webform-client-form-9, .webform-client-form-10,.webform-client-form-22{
+background: #E3E3E3;
+
+}
+
+/*Superfish*/
+.menu a.active {
+  color: #000;
+background: #c5c6de;  
+}
+.mean-container .mean-nav{
+background: #10167f;  
+color: #fff;
+text-decoration: underline;
+}
+
+#superfish-1{
+ margin-left:4%;
+}
+
+.h2{
+text-align:left;
+}
+
+
+.region-navigation #block-superfish-1 .content ul#superfish-1 > li.sf-item-1, .region-navigation #block-superfish-1 .content ul#superfish-1 > li.sf-item-2 {
+    border-left: 1px solid #a7aacb;
+    border-right: 1px solid #a7aacb;
+    margin-right: 3px;
+}
+
+
+.region-navigation #block-superfish-1 .content ul#superfish-1 > li.sf-item-1 a, .region-navigation #block-superfish-1 .content ul#superfish-1 > li.sf-item-2 a {
+    background: #7c81b8;
+}
+
+.region-navigation #block-superfish-1 .content ul li a {
+    background: #10167f;
+    color: #fff;
+    font-size: 0.9em;
+    height: 45px;
+    line-height: 50px;
+    padding: 0 0.8em;
+    text-decoration: none;
+}
+
+.region-navigation {
+    background: #10167f;
+    border: none;
+    height: 45px;
+    position: relative;
+    white-space: nowrap;
+    z-index: 3;
+}
+
+
