@@ -163,13 +163,13 @@ margin: 0.5em 0;
 
 /* Paragraph blank Lines from #u125*/
 .field-items{
-background: #E3E3E3;
+/*background: #E3E3E3;   - By Karen on June 27 no backlgroud color*/
  
 }
 
 /* Paragraph color form  #u125*/
 p{
-background-color: #E3E3E3;
+/*background-color: #E3E3E3;  - By Karen on June 27 no backlgroud color*/
 margin-top: 4px;
 margin-bottom: 10px; 
 }
@@ -181,7 +181,7 @@ background: #E3E3E3;
 }
 /*Nice Menu*/
 #block-nice-menus-1 {
-    margin-left:40%; 
+    margin-left:34%; 
 }
 
 /*Superfish*/
