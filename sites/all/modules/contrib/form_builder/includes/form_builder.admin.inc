@@ -6,6 +6,16 @@
  */
 
 /**
+ * Delivery callback that either returns JSON or HTML.
+ */
+function form_builder_deliver_ajax_or_html($result) {
+  if (is_array($result) && isset($result['#type']) && $result['#type'] == 'ajax') {
+    return ajax_deliver($result);
+  }
+  return drupal_deliver_html_page($result);
+}
+
+/**
  * Main form building interface. Can be used as a menu callback.
  *
  * @param $form_type
@@ -20,13 +30,10 @@ function form_builder_interface($form_type, $form_id) {
   // Set the current form type (used for display of the sidebar block).
   form_builder_active_form($form_type, $form_id);
 
-  // Load the current state of the form, or create a new cache if needed.
+  // Create an internal state from the permanently stored form.
   $loader = FormBuilderLoader::instance();
-  $form_obj = $loader->fromCache($form_type, $form_id);
-  if (!$form_obj) {
-    $form_obj = $loader->fromStorage($form_type, $form_id);
-    $form_obj->save();
-  }
+  $form_obj = $loader->fromStorage($form_type, $form_id);
+  $form_obj->save();
 
   $output = array();
   $output[] = drupal_get_form('form_builder_preview', $form_obj, $form_type, $form_id);
@@ -82,7 +89,7 @@ function _form_builder_add_element($form_type, $form_id, $element_type, $element
       }
       // Set the element type to the correct value so it will be used
       // consistently throughout this function.
-      $element_type = $element['#type'];
+      $element_type = $element['#form_builder']['element_type'];
     }
   }
   // Otherwise, create a new default field.
@@ -136,50 +143,32 @@ function _form_builder_add_element($form_type, $form_id, $element_type, $element
  * Menu callback for configuring a field.
  */
 function form_builder_configure_page($form_type, $form_id, $element_id) {
-  $output = drupal_get_form('form_builder_field_configure', $form_type, $form_id, $element_id);
-
-  if (isset($_REQUEST['js'])) {
-    // Return the newly changed field.
-    if (isset($_REQUEST['return'])) {
-      form_builder_field_json($form_type, $form_id, $element_id);
-    }
-    // Display the configuration form for a field.
-    else {
-      $data = array(
-        'formType' => $form_type,
-        'formId' => $form_id,
-        'elementId' => $element_id,
-        'html' => drupal_render($output),
-        'errors' => form_get_errors(),
-      );
-      form_builder_json_output($data);
-      exit();
-    }
+  $form = drupal_get_form('form_builder_field_configure', $form_type, $form_id, $element_id);
+  if (!isset($_REQUEST['js'])) {
+    return $form;
   }
-
-  return $output;
+  $commands[] = array(
+    'command' => 'formBuilder-displayForm',
+    'selector' => '#form-builder-element-' . $element_id,
+    'data' => drupal_render($form),
+  );
+  return array('#type' => 'ajax', '#commands' => $commands);
 }
 
 /**
  * Menu callback for removing a field.
  */
 function form_builder_remove_page($form_type, $form_id, $element_id) {
-  $output = drupal_get_form('form_builder_field_remove', $form_type, $form_id, $element_id);
-
-  if (isset($_REQUEST['js']) && !isset($_REQUEST['return'])) {
-    // This after build function immediately returns the form as JSON.
-    $data = array(
-      'formType' => $form_type,
-      'formId' => $form_id,
-      'elementId' => $element_id,
-      'html' => drupal_render($output),
-    );
-
-    form_builder_json_output($data);
-    exit();
+  $form = drupal_get_form('form_builder_field_remove', $form_type, $form_id, $element_id);
+  if (!isset($_REQUEST['js'])) {
+    return $form;
   }
-
-  return $output;
+  $commands[] = array(
+    'command' => 'formBuilder-displayForm',
+    'selector' => '#form-builder-element-' . $element_id,
+    'data' => drupal_render($form),
+  );
+  return array('#type' => 'ajax', '#commands' => $commands);
 }
 
 /**
@@ -400,13 +389,13 @@ function theme_form_builder_element_wrapper($variables) {
     $output .= '<div class="form-builder-title-bar">';
     $output .= '<span class="form-builder-links">';
     if ($removable) {
-      $output .= l('<span class="remove">'. t('Remove') .'</span>', 'admin/build/form-builder/remove/' . $element['#form_builder']['form_type'] . '/' . $element['#form_builder']['form_id'] . '/' . $element['#form_builder']['element_id'], array('html' => TRUE, 'attributes' => array('class' => array('remove'), 'title' => t('Remove')), 'query' => drupal_get_destination()));
+      $output .= l('<span class="remove">'. t('Remove') .'</span>', 'admin/structure/form-builder/remove/' . $element['#form_builder']['form_type'] . '/' . $element['#form_builder']['form_id'] . '/' . $element['#form_builder']['element_id'], array('html' => TRUE, 'attributes' => array('class' => array('remove'), 'title' => t('Remove')), 'query' => drupal_get_destination()));
     }
     if ($removable && $configurable) {
       $output .= ' ';
     }
     if ($configurable) {
-      $output .= l('<span class="configure">'. t('Configure') .'</span>', 'admin/build/form-builder/configure/' . $element['#form_builder']['form_type'] . '/' . $element['#form_builder']['form_id'] . '/' . $element['#form_builder']['element_id'], array('html' => TRUE, 'attributes' => array('class' => array('configure'), 'title' => t('Configure')), 'query' => drupal_get_destination()));
+      $output .= l('<span class="configure">'. t('Configure') .'</span>', 'admin/structure/form-builder/configure/' . $element['#form_builder']['form_type'] . '/' . $element['#form_builder']['form_id'] . '/' . $element['#form_builder']['element_id'], array('html' => TRUE, 'attributes' => array('class' => array('configure'), 'title' => t('Configure')), 'query' => drupal_get_destination()));
     }
     $output .= '</span>';
     $output .= '</div>';
@@ -415,7 +404,7 @@ function theme_form_builder_element_wrapper($variables) {
   if ($cloneable) {
     $output .= '<div class="form-builder-bottom-title-bar">';
     $output .= '<span class="form-builder-bottom-links">';
-    $output .= l('<span class="clone">'. t('Copy') .'</span>', 'admin/build/form-builder/clone/' . $element['#form_builder']['form_type'] . '/' . $element['#form_builder']['form_id'] . '/' . $element['#form_builder']['element_id'], array('html' => TRUE, 'attributes' => array('class' => array('clone'), 'title' => t('Copy')), 'query' => drupal_get_destination()));
+    $output .= l('<span class="clone">'. t('Copy') .'</span>', 'admin/structure/form-builder/clone/' . $element['#form_builder']['form_type'] . '/' . $element['#form_builder']['form_id'] . '/' . $element['#form_builder']['element_id'], array('html' => TRUE, 'attributes' => array('class' => array('clone'), 'title' => t('Copy')), 'query' => drupal_get_destination()));
     $output .= '</span>';
     $output .= '</div>';
   }
@@ -516,7 +505,7 @@ function theme_form_builder_field_palette($vars) {
 
     $lists[$field['palette_group']]['#weight'] = $groups[$field['palette_group']]['weight'];
     $lists[$field['palette_group']][] = array(
-      'data' => l($field['title'], 'admin/build/form-builder/add/' . $form_type . '/' . $form_id . '/' . $field_name, array('query' => drupal_get_destination())),
+      'data' => l($field['title'], 'admin/structure/form-builder/add/' . $form_type . '/' . $form_id . '/' . $field_name, array('query' => drupal_get_destination())),
       'class' => $class,
       'style' => $style,
     );
@@ -612,6 +601,7 @@ function form_builder_field_configure($form, $form_state, $form_type, $form_id, 
   $form_obj = FormBuilderLoader::instance()->fromCache($form_type, $form_id);
   $element_obj = $form_obj->getElement($element_id);
 
+  $form['#attributes']['class'][] = 'form-builder-field-configure';
   $form = $element_obj->configurationForm($form, $form_state);
   $form['#_edit_form_type'] = $form_type;
   $form['#_edit_form_id'] = $form_id;
@@ -667,7 +657,7 @@ function form_builder_field_configure_pre_render($form) {
 
 function form_builder_field_configure_submit(&$form, &$form_state) {
   list($form_type, $form_id, $element_id) = $form_state['build_info']['args'];
-  $form_obj = FormBUilderLoader::instance()->fromCache($form_type, $form_id);
+  $form_obj = FormBuilderLoader::instance()->fromCache($form_type, $form_id);
   $element_obj = $form_obj->getElement($element_id);
 
   $element_obj->configurationSubmit($form, $form_state);
@@ -675,11 +665,11 @@ function form_builder_field_configure_submit(&$form, &$form_state) {
   // Update the form builder cache.
   $form_obj->save();
 
-  if (isset($_GET['js'])) {
+  if (isset($_REQUEST['js'])) {
     // Option A: Use the destination variable to do a drupal_goto(). Allows
     // other submit handlers to add on extra functionality.
     // The destination variable takes precedence over $form_state['redirect'].
-    //$_REQUEST['destination'] = 'admin/build/form-builder/json/' . $form_type . '/' . $form_id . '/' . $element_id;
+    //$_REQUEST['destination'] = 'admin/structure/form-builder/json/' . $form_type . '/' . $form_id . '/' . $element_id;
 
     // Option B: Immediately print the JSON and exit. Faster and requires only
     // one HTTP request instead of two. Other submit handlers must be before
@@ -692,7 +682,7 @@ function form_builder_field_configure_submit(&$form, &$form_state) {
  * Form for removing a field.
  */
 function form_builder_field_remove($form, $form_state, $form_type, $form_id, $element_id) {
-  $form_obj = FormBUilderLoader::instance()->fromCache($form_type, $form_id);
+  $form_obj = FormBuilderLoader::instance()->fromCache($form_type, $form_id);
   $element_obj = $form_obj->getElement($element_id);
   $title = $element_obj->title();
 
@@ -700,6 +690,13 @@ function form_builder_field_remove($form, $form_state, $form_type, $form_id, $el
   $path = isset($_GET['destination']) ? $_GET['destination'] : NULL;
   $description = t('Remove the field %title? This field will not be permanently removed until the form configuration is saved.', array('%title' => $title));
   $yes = t('Remove');
+
+  if ($_REQUEST['js']) {
+    $form['js'] = array(
+      '#type' => 'hidden',
+      '#value' => '1',
+    );
+  }
 
   return confirm_form($form, $question, $path, $description, $yes);
 }
@@ -710,10 +707,10 @@ function form_builder_field_remove_submit(&$form, &$form_state) {
   // Update the form builder cache.
   form_builder_cache_field_delete($form_type, $form_id, $element_id);
 
-  if (isset($_GET['js'])) {
+  if (isset($_REQUEST['js'])) {
     // See form_builder_field_configure_submit() for comparison between using
     // redirect and immediately printing the JSON.
-    //$form_state['redirect'] = 'admin/build/form-builder/json/' . $form_type . '/' . $form_id . '/' . $element_id;
+    //$form_state['redirect'] = 'admin/structure/form-builder/json/' . $form_type . '/' . $form_id . '/' . $element_id;
     form_builder_field_json($form_type, $form_id, $element_id);
   }
 }
