@@ -174,11 +174,11 @@ margin-top: 4px;
 margin-bottom: 10px; 
 }
 
-/*WebForm display */
+/*WebForm display - No background color by Karen June 27
 .webform-client-form-9, .webform-client-form-10,.webform-client-form-22{
 background: #E3E3E3;
-
 }
+*/
 /*Nice Menu*/
 #block-nice-menus-1 {
     margin-left:34%; 
@@ -281,10 +281,11 @@ h2.block__title.block-title {
  background: #3DB30E;
  }
 
-/* Frequently Asked Questions background color*/
+/* Frequently Asked Questions background color - Removed by Karen June 27
 .faq-content {
 	background: #E3E3E3;
 }
+*/
 
 /* Setting Footer Nice Menu*/
   ul.nice-menu li a:hover { 
@@ -310,3 +311,4 @@ ul.nice-menu,
 	color: #666;
 	}
 
+.tabs{ display:none;}
