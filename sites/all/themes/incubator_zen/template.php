@@ -150,5 +150,7 @@ if ($user->uid) {
  //  echo "<div style='text-align:right'><h2>Welcome ".$user->name."!</h2></div>";
 //echo "<div id='page' style='color:#800000;text-align:right'>Welcome <u> ".$user->name."!</u></div>";
  }
+ 
+ /*Upload again */
 ?>
 
