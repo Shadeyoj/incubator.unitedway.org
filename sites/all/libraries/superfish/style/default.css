@@ -40,12 +40,15 @@
 .sf-menu.sf-style-default li,
 .sf-menu.sf-style-default.sf-navbar {
   background: #bdd2ff;
+  
 }
 .sf-menu.sf-style-default li li {
   background: #aabde6;
+  
 }
 .sf-menu.sf-style-default li li li {
   background: #9aaedb;
+  
 }
 .sf-menu.sf-style-default li:hover,
 .sf-menu.sf-style-default li.sfHover,
@@ -54,6 +57,7 @@
 .sf-menu.sf-style-default a:active,
 .sf-menu.sf-style-default span.nolink:hover {
   background: #cfdeff;
+  
   outline: 0;
 }
 div.sf-accordion-toggle.sf-style-default a {
@@ -66,6 +70,8 @@ div.sf-accordion-toggle.sf-style-default a {
 div.sf-accordion-toggle.sf-style-default a.sf-expanded,
 .sf-menu.sf-style-default.sf-accordion li.sf-expanded {
   background-color: #cfdeff;
+  background:#FF1919;
+
 }
 div.sf-accordion-toggle.sf-style-default a.sf-expanded,
 .sf-menu.sf-style-default.sf-accordion li.sf-expanded > a,

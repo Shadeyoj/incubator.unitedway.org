@@ -130,3 +130,25 @@ function incubator_zen_preprocess_block(&$variables, $hook) {
   //}
 }
 // */
+/*
+function incubator_zen_theme() {
+global $user;
+if ($user->uid) {
+  print 'Welcome back '.$user->name.'!';
+}
+}
+*/
+
+ global $user;
+ ?>
+ <?php
+ //http://drupal.stackexchange.com/questions/3366/how-can-i-add-a-real-name-field-beside-username-to-user-information
+ 
+ if ($user->uid) {
+ //print 'Welcome ' .$user->name.'!';
+ // print"<p align=\"RIGHT\"><h2>Welcome " .$user->name."!</h2></p>";
+ //  echo "<div style='text-align:right'><h2>Welcome ".$user->name."!</h2></div>";
+//echo "<div id='page' style='color:#800000;text-align:right'>Welcome <u> ".$user->name."!</u></div>";
+ }
+?>
+

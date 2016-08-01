@@ -42,15 +42,12 @@
 .sf-menu.sf-style-pomegranate li,
 .sf-menu.sf-style-pomegranate.sf-navbar {
   background: #79001c;
-  background:#ea1414;
 }
 .sf-menu.sf-style-pomegranate li li {
   background: #6c0019;
-background:#ea1414;
-  }
+}
 .sf-menu.sf-style-pomegranate li li li {
   background: #5f0016;
-  background:#ea1414;
 }
 .sf-menu.sf-style-pomegranate li:hover,
 .sf-menu.sf-style-pomegranate li.sfHover,
@@ -60,14 +57,10 @@ background:#ea1414;
 .sf-menu.sf-style-pomegranate span.nolink:hover,
 .sf-menu.sf-style-pomegranate.sf-navbar li li {
   background: #4c0012;
-  background:#ea1414;
-
   color: #ffffff;
 }
 .sf-menu.sf-style-pomegranate.sf-navbar li ul {
   background-color: #4c0012;
-  background-color: #ea1414;
-
 }
 .sf-menu.sf-style-pomegranate.sf-navbar li ul li ul {
   background-color: transparent;
@@ -81,8 +74,6 @@ div.sf-accordion-toggle.sf-style-pomegranate a {
 div.sf-accordion-toggle.sf-style-pomegranate a.sf-expanded,
 .sf-menu.sf-style-pomegranate.sf-accordion li.sf-expanded {
   background-color: #4c0012;
-  background-color:#ea1414;
-
 }
 div.sf-accordion-toggle.sf-style-pomegranate a.sf-expanded,
 .sf-menu.sf-style-pomegranate.sf-accordion li.sf-expanded > a,
