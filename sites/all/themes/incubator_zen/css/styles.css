@@ -1,4 +1,4 @@
-/**
+In/**
  * @file
  * Styles are organized using the SMACSS technique. @see http://smacss.com/book/
  *
@@ -108,10 +108,23 @@ content: "<a href="http://www.google.com">";
 	display: none;
 }
 
+/*removing page title like 'Home'*/
 .views-field.views-field-title {
 	display: none;
 
 }
+/*removing page header*/
+h1#page-title.page__title.title {
+visibility: hidden;
+position: relative;
+line-height: 0px;
+}
+
+/* adjusting anouncement block */
+#block-block-5{
+float: left;
+}
+
 /* Navigation bar */
 
 @media all and (min-width: 480px) {
@@ -244,21 +257,21 @@ color: #fff;
 /*slide show alignment - Block   margin-left:10%; float: right; width:80%;*/
 #views_slideshow_cycle_main_test_view-block{
     float: right;
-    width:92%;    
+    width:89%;    
 }
 
 /*superfish 1 menu alignment*/
 #superfish-1{
  display: inline-block;  
- margin-left:18%;
- margin-right:19%;
+ margin-left:26.5%;
+ margin-right:26%;
 }
 
 /*superfish 2 menu alignment*/
 #superfish-2{
 display: inline-block;  
- margin-left: 16%;
- margin-right:15%;
+ margin-left: 24.5%;
+ margin-right:24.6%;
 
 }
 
@@ -390,3 +403,5 @@ and update pomegranate.css with  background:#FF1919; */
 
 
 /*Upload again */
+
+
